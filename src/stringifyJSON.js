@@ -4,5 +4,22 @@
 // but you don't so you're going to write it from scratch:
 
 var stringifyJSON = function(obj) {
-  // your code goes here
+  var resultString = '';
+
+  var wrapQuotes = function(item) {
+  	return '\"' + item + '\"';
+  };
+
+  var findObjs = function(obj) {
+  	if (typeof obj !== 'object' || obj === null) {
+  		if (typeof obj === 'string') {
+		  	resultString += wrapQuotes(obj);
+  		} else {
+	  		resultString += obj;
+	  	}
+  	}
+
+  }(obj);
+
+  return resultString;
 };
