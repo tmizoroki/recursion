@@ -5,11 +5,11 @@
 
 // But instead we're going to implement it from scratch:
 var getElementsByClassName = function(className){
-	// your code here
+	
 	var element = document.body;
 	var elementList = [];
 
-	var searchElements = function (className, element) {
+	var searchElements = function(element) {
 		//action
 		_.each(element.classList, function(foundClass) {
 		if (foundClass === className) {
@@ -24,11 +24,11 @@ var getElementsByClassName = function(className){
 
 		//recursive call
 		_.each(element.childNodes, function(child) {
-			searchElements(className, child);
+			searchElements(child);
 		});
 	};
 
-	searchElements(className, element);
+	searchElements(element);
 
 	return elementList;
 };
