@@ -22,7 +22,13 @@ var parseJSON = function(json) {
   };
 
   var string = function() {
-
+    var strHolder = "";
+    nextChar();
+    while (char !== '"') {
+      strHolder += char;
+      nextChar();
+    }
+    return strHolder;
   };
 
   var number = function() {
@@ -32,6 +38,7 @@ var parseJSON = function(json) {
       numString += char;
       nextChar();
     }
+    console.log(typeof Number(numString));
     return Number(numString);
   };
 
@@ -42,13 +49,20 @@ var parseJSON = function(json) {
   var array = function() {
     var arrayHolder  = [];
     nextChar();
-    if (char === ']') {
-      return arrayHolder;
-    } else {
-      value();
-    }
-
-
+    var arrayInner = function() {    
+      if (char === ']') {
+        return arrayHolder;
+      } else {
+        arrayHolder.push(value());
+        nextChar();
+        if (char === ',') {
+          nextChar();
+          arrayInner();
+        }
+      }
+    };
+    arrayInner();
+    return arrayHolder;
   };
 
   var object = function() {
@@ -64,7 +78,6 @@ var parseJSON = function(json) {
 
   var value = function() {
     if (char === '[') {
-      console.log('test1');
       return array();
     } else if (char === '\"' || char === '\'') {
       return string();
@@ -85,4 +98,5 @@ var parseJSON = function(json) {
   };
 }();
 
-console.log(typeof parseJSON('{}'));
+console.log(parseJSON('["Hi",8]'));
+console.log(JSON.parse('["Hi", 8]'));
