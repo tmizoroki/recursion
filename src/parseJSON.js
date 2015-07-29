@@ -10,8 +10,9 @@ var parseJSON = function(json) {
 
   };
 
-  var next = function() {
-
+  var nextChar = function() {
+    chIndex++;
+    char = json.charAt(chIndex);
   };
 
   var whiteSpace = function() {
@@ -31,6 +32,16 @@ var parseJSON = function(json) {
   };
 
   var array = function() {
+    var arrayHolder  = [];
+    nextChar();
+    console.log(char);
+    if (char === ']') {
+      console.log('test3');
+      return arrayHolder;
+    } else {
+      value();
+    }
+
 
   };
 
@@ -39,6 +50,28 @@ var parseJSON = function(json) {
   };
 
   var value = function() {
-
+    if (char === '[') {
+      console.log('test1');
+      return array();
+    } else if (char === '\"' || char === '\'') {
+      console.log('test2');
+      return string();
+    } else if (char === '{') {
+      return object();
+    } else if (char === '-' || /\d/.test(char)){
+      return  number();
+    } else {
+      return word();
+    }
   };
-};
+
+  return function(text) {
+    json = text;
+    chIndex = 0;
+    char = json[chIndex];
+    console.log(char);
+    return value();
+  };
+}();
+
+console.log(typeof parseJSON('[]'));
