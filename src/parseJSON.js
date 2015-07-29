@@ -42,9 +42,7 @@ var parseJSON = function(json) {
   var array = function() {
     var arrayHolder  = [];
     nextChar();
-    console.log(char);
     if (char === ']') {
-      console.log('test3');
       return arrayHolder;
     } else {
       value();
@@ -54,6 +52,13 @@ var parseJSON = function(json) {
   };
 
   var object = function() {
+    var objHolder = {};
+    nextChar();
+    if (char === '}') {
+      return objHolder;
+    } else {
+      value();
+    }
 
   };
 
@@ -62,7 +67,6 @@ var parseJSON = function(json) {
       console.log('test1');
       return array();
     } else if (char === '\"' || char === '\'') {
-      console.log('test2');
       return string();
     } else if (char === '{') {
       return object();
@@ -77,10 +81,8 @@ var parseJSON = function(json) {
     json = text;
     chIndex = 0;
     char = json[chIndex];
-    console.log(char);
     return value();
   };
 }();
 
-console.log(parseJSON('-9.02e5'));
-console.log(JSON.parse('-9.02e5'));
+console.log(typeof parseJSON('{}'));
