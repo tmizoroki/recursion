@@ -16,7 +16,9 @@ var parseJSON = function(json) {
   };
 
   var whiteSpace = function() {
-
+    if (char === " ") {
+      //return;
+    }
   };
 
   var string = function() {
@@ -24,7 +26,13 @@ var parseJSON = function(json) {
   };
 
   var number = function() {
-
+    var numString = "";
+    var numericChars = /[-\.\de]/;
+    while (numericChars.test(char)) {
+      numString += char;
+      nextChar();
+    }
+    return Number(numString);
   };
 
   var word = function() {
@@ -74,4 +82,5 @@ var parseJSON = function(json) {
   };
 }();
 
-console.log(typeof parseJSON('[]'));
+console.log(parseJSON('-9.02e5'));
+console.log(JSON.parse('-9.02e5'));
