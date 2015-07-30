@@ -14,6 +14,11 @@ var parseJSON = function(json) {
     chIndex++;
     char = json.charAt(chIndex);
   };
+  
+  var goBack = function() {
+    chIndex--;
+    char = json.charAt(chIndex);
+  };
 
   var whiteSpace = function() {
     while (char === " ") {
@@ -38,12 +43,25 @@ var parseJSON = function(json) {
       numString += char;
       nextChar();
     }
-    console.log(typeof Number(numString));
+    goBack();
+
     return Number(numString);
   };
 
   var word = function() {
-
+    if (json.slice(chIndex, chIndex + 4) === 'null') {
+      chIndex += 3;
+      char = json.charAt(chIndex);
+      return null;
+    } else if (json.slice(chIndex, chIndex + 4) === 'true') {
+      chIndex += 3;
+      char = json.charAt(chIndex);
+      return true;
+    } else if (json.slice(chIndex, chIndex + 5) === 'false') {
+      chIndex += 4;
+      char = json.charAt(chIndex);
+      return false;
+    }
   };
 
   var array = function() {
@@ -69,12 +87,26 @@ var parseJSON = function(json) {
   var object = function() {
     var objHolder = {};
     nextChar();
-    if (char === '}') {
-      return objHolder;
-    } else {
-      value();
-    }
-
+    var objInner = function() {
+      if (char === '}') {
+        return objHolder;
+      } else {
+        var key = string();
+        nextChar();
+        nextChar();
+        whiteSpace();
+        var val = value();
+        objHolder[key] = val;
+        nextChar();
+        if (char === ',') {
+          nextChar();
+          whiteSpace();
+          objInner();
+        }
+      } 
+    };
+    objInner();
+    return objHolder;
   };
 
   var value = function() {
@@ -99,5 +131,6 @@ var parseJSON = function(json) {
   };
 }();
 
-console.log(parseJSON('["Hi", 8]'));
-console.log(JSON.parse('["Hi", 8]'));
+console.log(parseJSON('{"foo": null, "num": true, "empty": null}'));
+console.log(JSON.parse('{"foo": null, "num": true, "empty": null}'));
+console.log(parseJSON('[true,false,null]'));
