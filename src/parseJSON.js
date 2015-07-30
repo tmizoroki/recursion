@@ -16,8 +16,8 @@ var parseJSON = function(json) {
   };
 
   var whiteSpace = function() {
-    if (char === " ") {
-      //return;
+    while (char === " ") {
+      nextChar();
     }
   };
 
@@ -57,6 +57,7 @@ var parseJSON = function(json) {
         nextChar();
         if (char === ',') {
           nextChar();
+          whiteSpace();
           arrayInner();
         }
       }
@@ -98,5 +99,5 @@ var parseJSON = function(json) {
   };
 }();
 
-console.log(parseJSON('["Hi",8]'));
+console.log(parseJSON('["Hi", 8]'));
 console.log(JSON.parse('["Hi", 8]'));
