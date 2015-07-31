@@ -21,16 +21,32 @@ var parseJSON = function(json) {
   };
 
   var whiteSpace = function() {
-    while (char === " ") {
+    while (/\s/.test(char)) {
       nextChar();
     }
+  };
+
+  var escapeChars = {
+    '\\': '\\',
+    '"': '"',
+    'n': '\n',
+    'r': '\r',
+    't': '\t',
+    'f': '\f'
   };
 
   var string = function() {
     var strHolder = "";
     nextChar();
-    while (char !== '"') {
-      strHolder += char;
+    while (char !== '"' && chIndex < json.length) {
+      if (char === '\\') {
+        nextChar();
+        if (char in escapeChars) {
+          strHolder += escapeChars[char]; 
+        }
+      } else {
+        strHolder += char;
+      }
       nextChar();
     }
     return strHolder;
