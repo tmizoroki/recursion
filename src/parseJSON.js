@@ -6,10 +6,6 @@ var parseJSON = function(json) {
   var char; //current character
   var chIndex; //current index
 
-  var error = function() {
-
-  };
-
   var nextChar = function() {
     chIndex++;
     char = json.charAt(chIndex);
@@ -49,6 +45,9 @@ var parseJSON = function(json) {
       }
       nextChar();
     }
+    if (chIndex >= json.length) {
+      throw new SyntaxError('No closing quotation mark');
+    }
     return strHolder;
   };
 
@@ -60,8 +59,11 @@ var parseJSON = function(json) {
       nextChar();
     }
     goBack();
-
-    return Number(numString);
+    if (isNaN(numString)) {
+      throw new SyntaxError('Is not a number');
+    } else {
+      return Number(numString);
+    }
   };
 
   var word = function() {
@@ -78,6 +80,8 @@ var parseJSON = function(json) {
       char = json.charAt(chIndex);
       return false;
     }
+
+    throw new SyntaxError("Character not recognized");
   };
 
   var array = function() {
@@ -97,7 +101,11 @@ var parseJSON = function(json) {
       }
     };
     arrayInner();
-    return arrayHolder;
+    if (char === ']') {
+      return arrayHolder;
+    } else {
+      throw new SyntaxError('Array not closed');
+    }
   };
 
   var object = function() {
@@ -122,7 +130,11 @@ var parseJSON = function(json) {
       } 
     };
     objInner();
-    return objHolder;
+    if (char === "}") {
+      return objHolder;
+    } else {
+      throw new SyntaxError('Object not closed');
+    }
   };
 
   var value = function() {
@@ -146,7 +158,3 @@ var parseJSON = function(json) {
     return value();
   };
 }();
-
-console.log(parseJSON('{"foo": null, "num": true, "empty": null}'));
-console.log(JSON.parse('{"foo": null, "num": true, "empty": null}'));
-console.log(parseJSON('[true,false,null]'));
