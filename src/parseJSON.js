@@ -87,12 +87,14 @@ var parseJSON = function(json) {
   var array = function() {
     var arrayHolder  = [];
     nextChar();
-    var arrayInner = function() {    
+    var arrayInner = function() {  
+      whiteSpace();  
       if (char === ']') {
         return arrayHolder;
       } else {
         arrayHolder.push(value());
         nextChar();
+        whiteSpace();
         if (char === ',') {
           nextChar();
           whiteSpace();
@@ -115,13 +117,16 @@ var parseJSON = function(json) {
       if (char === '}') {
         return objHolder;
       } else {
+        whiteSpace();
         var key = string();
         nextChar();
+        whiteSpace();
         nextChar();
         whiteSpace();
         var val = value();
         objHolder[key] = val;
         nextChar();
+        whiteSpace();
         if (char === ',') {
           nextChar();
           whiteSpace();
